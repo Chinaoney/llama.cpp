@@ -17,15 +17,20 @@ jobs:
         run: |
           curl.exe -L --output "$env:TEMP\VulkanSDK-Installer.exe" "https://sdk.lunarg.com/sdk/download/1.3.296.0/windows/VulkanSDK-1.3.296.0-Installer.exe"
           Start-Process -Wait -FilePath "$env:TEMP\VulkanSDK-Installer.exe" -ArgumentList "--root", "C:\VulkanSDK", "--accept-licenses", "--default-answer", "--confirm-command", "install"
-          echo "VulkanSDK installed"
 
       - name: Configure CMake
-        shell: cmd
-        run: cmake -B build -DLLAMA_VULKAN=ON -DLLAMA_CURL=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=ON -DCMAKE_BUILD_TYPE=Release -DVulkan_INCLUDE_DIR="C:\VulkanSDK\Include" -DVulkan_LIBRARY="C:\VulkanSDK\Lib\vulkan-1.lib"
+        shell: pwsh
+        run: |
+          $env:VULKAN_SDK = "C:\VulkanSDK"
+          $env:PATH = "C:\VulkanSDK\Bin;" + $env:PATH
+          cmake -B build -DLLAMA_VULKAN=ON -DLLAMA_CURL=OFF -DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=ON -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        shell: cmd
-        run: cmake --build build --config Release -j4
+        shell: pwsh
+        run: |
+          $env:VULKAN_SDK = "C:\VulkanSDK"
+          $env:PATH = "C:\VulkanSDK\Bin;" + $env:PATH
+          cmake --build build --config Release -j4
 
       - name: Upload
         uses: actions/upload-artifact@v4
