@@ -20,10 +20,7 @@ jobs:
 
       - name: Configure CMake
         shell: cmd
-        run: |
-          set "VULKAN_SDK=C:\VulkanSDK"
-          set "PATH=C:\VulkanSDK\Bin;%PATH%"
-          cmake -B build -DLLAMA_VULKAN=ON -DLLAMA_CURL=OFF -DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=ON -DCMAKE_BUILD_TYPE=Release
+        run: set VULKAN_SDK=C:\VulkanSDK && set PATH=C:\VulkanSDK\Bin;%PATH% && cmake -B build -DLLAMA_VULKAN=ON -DLLAMA_CURL=OFF -DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=ON -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
         shell: cmd
