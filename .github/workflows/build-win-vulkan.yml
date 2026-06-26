@@ -26,7 +26,8 @@ jobs:
 
       - name: Configure CMake
         shell: pwsh
-        run: cmake -B build -DLLAMA_VULKAN=ON -DLLAMA_CURL=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release
+        run: |
+          cmake -B build -DLLAMA_VULKAN=ON -DLLAMA_CURL=OFF -DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=ON -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
         shell: pwsh
