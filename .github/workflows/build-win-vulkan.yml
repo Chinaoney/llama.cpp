@@ -17,10 +17,11 @@ jobs:
         run: |
           curl.exe -L --output "$env:TEMP\VulkanSDK-Installer.exe" "https://sdk.lunarg.com/sdk/download/1.3.296.0/windows/VulkanSDK-1.3.296.0-Installer.exe"
           Start-Process -Wait -FilePath "$env:TEMP\VulkanSDK-Installer.exe" -ArgumentList "--root", "C:\VulkanSDK", "--accept-licenses", "--default-answer", "--confirm-command", "install"
+          echo "VulkanSDK installed"
 
       - name: Configure CMake
         shell: cmd
-        run: set VULKAN_SDK=C:\VulkanSDK && set PATH=C:\VulkanSDK\Bin;%PATH% && cmake -B build -DLLAMA_VULKAN=ON -DLLAMA_CURL=OFF -DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=ON -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B build -DLLAMA_VULKAN=ON -DLLAMA_CURL=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_DISABLE_FIND_PACKAGE_OpenSSL=ON -DCMAKE_BUILD_TYPE=Release -DVulkan_INCLUDE_DIR="C:\VulkanSDK\Include" -DVulkan_LIBRARY="C:\VulkanSDK\Lib\vulkan-1.lib"
 
       - name: Build
         shell: cmd
